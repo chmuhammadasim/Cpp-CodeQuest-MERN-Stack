@@ -8,6 +8,7 @@ const ChallengeDetail = () => {
   const [challenge, setChallenge] = useState(null);
   const [code, setCode] = useState('');
   const [output, setOutput] = useState('');
+  const [hint, setHint] = useState('');
 
   useEffect(() => {
     const fetchChallenge = async () => {
@@ -26,11 +27,12 @@ const ChallengeDetail = () => {
       const token = localStorage.getItem('token');
       await axios.post(
         'http://localhost:5000/api/progress/complete',
-        { challengeId: id },
+        { challengeId: id, scoreIncrement: 10 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } else {
       setOutput('Try again.');
+      setHint('Hint: Check your syntax.');
     }
   };
 
@@ -39,18 +41,21 @@ const ChallengeDetail = () => {
   return (
     <div>
       <Navbar />
-      <h1>{challenge.title}</h1>
-      <p>{challenge.description}</p>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          rows="10"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          style={{ width: '100%', padding: '10px' }}
-        ></textarea>
-        <button type="submit">Submit</button>
-      </form>
-      <pre>{output}</pre>
+      <div className="challenge-container">
+        <h1>{challenge.title}</h1>
+        <p>{challenge.description}</p>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            rows="10"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            style={{ width: '100%', padding: '10px' }}
+          ></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        <pre>{output}</pre>
+        {hint && <p>{hint}</p>}
+      </div>
     </div>
   );
 };
