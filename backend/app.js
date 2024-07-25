@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const challengeRoutes = require('./routes/challengeRoutes');
+const progressRoutes = require('./routes/progressRoutes');
 
 const app = express();
 const port = 5000;
@@ -20,6 +22,8 @@ db.once('open', () => {
 });
 
 app.use('/api/users', userRoutes);
+app.use('/api/challenges', challengeRoutes);
+app.use('/api/progress', progressRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to C++ CodeQuest');
