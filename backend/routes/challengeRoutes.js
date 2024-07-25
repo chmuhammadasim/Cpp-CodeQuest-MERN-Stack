@@ -34,5 +34,16 @@ router.get('/:id', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+router.post('/feedback/:id', authenticate, async (req, res) => {
+  const { feedback } = req.body;
+  try {
+    const challenge = await Challenge.findById(req.params.id);
+    challenge.feedback = feedback;
+    await challenge.save();
+    res.json({ message: 'Feedback updated successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 module.exports = router;
