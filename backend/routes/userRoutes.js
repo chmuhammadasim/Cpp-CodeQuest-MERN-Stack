@@ -17,6 +17,17 @@ const authenticate = (req, res, next) => {
     res.status(401).json({ error: 'Unauthorized' });
   }
 };
+router.post('/darkmode', authenticate, async (req, res) => {
+  const { darkMode } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    user.darkMode = darkMode;
+    await user.save();
+    res.json({ message: 'Dark mode preference updated' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;

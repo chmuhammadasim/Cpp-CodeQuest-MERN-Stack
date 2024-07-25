@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   progress: { type: Object, default: {} },
+  darkMode: { type: Boolean, default: false },
 });
 
 userSchema.pre('save', async function (next) {
