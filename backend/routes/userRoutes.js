@@ -5,6 +5,19 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+const authenticate = (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
+
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -31,5 +44,12 @@ router.post('/login', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
+router.get('/profile', authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 module.exports = router;

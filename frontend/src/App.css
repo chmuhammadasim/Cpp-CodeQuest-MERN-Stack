@@ -104,3 +104,29 @@ button {
 button:hover {
   background-color: #555;
 }
+.profile-container, .leaderboard-container, .challenge-container {
+  max-width: 800px;
+  margin: 2em auto;
+  padding: 2em;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+}
+
+.leaderboard-list, .completed-challenges-list {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard-list li, .completed-challenges-list li {
+  padding: 0.5em 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.leaderboard-list li:last-child, .completed-challenges-list li:last-child {
+  border-bottom: none;
+}
