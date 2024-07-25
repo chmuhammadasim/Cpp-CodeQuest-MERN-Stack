@@ -45,5 +45,22 @@ router.post('/feedback/:id', authenticate, async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+router.get('/daily', async (req, res) => {
+  try {
+    const challenges = await Challenge.find({ dailyChallenge: true });
+    res.json(challenges);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.get('/weekly', async (req, res) => {
+  try {
+    const challenges = await Challenge.find({ weeklyChallenge: true });
+    res.json(challenges);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 module.exports = router;
