@@ -20,7 +20,7 @@ const authenticate = (req, res, next) => {
 // Get progress for the authenticated user
 router.get('/', authenticate, async (req, res) => {
   try {
-    const progress = await Progress.findOne({ userId: req.user.id });
+    const progress = await Progress.findOne({ userId: req.user.id }).populate('userId', 'username');
     res.json(progress || {});
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -29,14 +29,27 @@ router.get('/', authenticate, async (req, res) => {
 
 // Update progress for the authenticated user
 router.post('/complete', authenticate, async (req, res) => {
-  const { challengeId } = req.body;
+  const { challengeId, scoreIncrement } = req.body;
   try {
     const progress = await Progress.findOneAndUpdate(
       { userId: req.user.id },
-      { $addToSet: { completedChallenges: challengeId } },
+      { $addToSet: { completedChallenges: challengeId }, $inc: { score: scoreIncrement } },
       { new: true, upsert: true }
     );
     res.json(progress);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get leaderboard
+router.get('/leaderboard', async (req, res) => {
+  try {
+    const leaderboard = await Progress.find()
+      .populate('userId', 'username')
+      .sort({ score: -1 })
+      .limit(10);
+    res.json(leaderboard);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
