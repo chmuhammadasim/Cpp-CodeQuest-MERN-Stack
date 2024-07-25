@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/theme-github';
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -16,12 +19,17 @@ const ChallengeDetail = () => {
       setChallenge(response.data);
       setCode(response.data.starterCode);
     };
+    const fetchFeedback = async () => {
+      const response = await axios.get(`http://localhost:5000/api/challenges/${id}`);
+      setHint(response.data.feedback);
+    };
+    fetchFeedback();
     fetchChallenge();
   }, [id]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate code execution (in a real app, you'd likely send the code to a backend service for evaluation)
     if (code === challenge.solution) {
       setOutput('Correct!');
       const token = localStorage.getItem('token');
@@ -45,12 +53,15 @@ const ChallengeDetail = () => {
         <h1>{challenge.title}</h1>
         <p>{challenge.description}</p>
         <form onSubmit={handleSubmit}>
-          <textarea
-            rows="10"
+          <AceEditor
+            mode="c_cpp"
+            theme="github"
+            name="code_editor"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            style={{ width: '100%', padding: '10px' }}
-          ></textarea>
+            onChange={(newValue) => setCode(newValue)}
+            editorProps={{ $blockScrolling: true }}
+            style={{ width: '100%', height: '300px' }}
+          />
           <button type="submit">Submit</button>
         </form>
         <pre>{output}</pre>
