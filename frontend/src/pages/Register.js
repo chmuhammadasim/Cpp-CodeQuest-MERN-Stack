@@ -1,37 +1,34 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/register', { username, password });
-      alert('User registered successfully');
+      await axios.post('http://localhost:5000/api/auth/register', { username, password });
+      navigate('/login');
     } catch (error) {
-      console.error(error.response.data);
+      console.error('Registration error', error);
     }
   };
 
   return (
     <div>
-      <h1>Register</h1>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
+        <div>
+          <label>Username:</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
         <button type="submit">Register</button>
       </form>
     </div>
