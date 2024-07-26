@@ -33,11 +33,12 @@ const ChallengeDetail = () => {
     if (code === challenge.solution) {
       setOutput('Correct!');
       const token = localStorage.getItem('token');
-      await axios.post(
+      const response = await axios.post(
         'http://localhost:5000/api/progress/complete',
         { challengeId: id, scoreIncrement: 10 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      alert(`Result: ${response.data.result}`);
     } else {
       setOutput('Try again.');
       setHint('Hint: Check your syntax.');

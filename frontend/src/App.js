@@ -8,6 +8,7 @@ import Challenges from './pages/Challenges';
 import ChallengeDetail from './pages/ChallengeDetail';
 import Notifications from './pages/Notifications';
 import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './pages/Profile';
 
 
 const App = () => {
@@ -21,6 +22,8 @@ const App = () => {
       <Route path="/challenges" element={<ProtectedRoute component={Challenges} />} />
       <Route path="/challenges/:id" element={<ProtectedRoute component={ChallengeDetail} />} />
       <Route path="/notifications" element={<ProtectedRoute component={Notifications} />} />
+      <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
+
       </Routes>
     </Router>
   );
