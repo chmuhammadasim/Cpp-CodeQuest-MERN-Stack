@@ -2,7 +2,18 @@ const express = require('express');
 const Challenge = require('../models/Challenge');
 
 const router = express.Router();
+const authenticate = (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
 // Create a new challenge
 router.post('/create', async (req, res) => {
   const { title, description, starterCode, solution } = req.body;

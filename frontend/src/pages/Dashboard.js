@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchProgress = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users/progress', {
+      const response = await axios.get('http://localhost:5000/api/progress/', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProgress(response.data.progress);
